@@ -1,13 +1,35 @@
 services:
-  spotter:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spotter
+    container_name: app 
     env_file:
-    - spotter.env
+    - postgres.env
     ports:
       - "8080:8080"
     volumes:
-      - ${PWD}:/spotter/
+      - ${PWD}:/app/
+    depends_on:
+      - postgres
     command: go run app/main.go
+    networks:
+      - backend-network
+  postgres:
+    container_name: postgres
+    image: postgres:16.4-alpine
+    env_file:
+    - postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend-network
+
+volumes:  
+  pgdata: {}
+
+networks:
+  backend-network:
+    driver: bridge
