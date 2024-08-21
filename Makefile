@@ -5,4 +5,4 @@ run: build
 	docker run --rm -it -p 8080:8080 spotter
 
 compose:
-	docker compose up
+	docker compose up --build

@@ -1,0 +1,13 @@
+services:
+  spotter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spotter
+    env_file:
+    - spotter.env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${PWD}:/spotter/
+    command: go run app/main.go
