@@ -6,3 +6,4 @@ run: build
 
 compose:
 	docker compose up --remove-orphans
+	docker compose down -v

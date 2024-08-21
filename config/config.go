@@ -32,8 +32,8 @@ func (c *DBConfig) GetDSN() string {
 }
 
 func InitConfig() *Config {
-	if err := godotenv.Load("spotter.env"); err != nil {
-		log.Fatal("Error loading clickhouse.env file")
+	if err := godotenv.Load("postgres.env"); err != nil {
+		log.Fatal("Error loading postgres.env file")
 	}
 
 	return &Config{

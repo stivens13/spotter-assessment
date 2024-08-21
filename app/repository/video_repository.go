@@ -1,0 +1,53 @@
+package repository
+
+import (
+	"github.com/stivens13/spotter-assessment/app/models"
+	"gorm.io/gorm"
+)
+
+type VideoRepository struct {
+	db *gorm.DB
+}
+
+func NewVideoRepository(db *gorm.DB) *VideoRepository {
+	return &VideoRepository{
+		db: db,
+	}
+}
+
+func (r *VideoRepository) Create(video *models.Video) error {
+	result := r.db.Create(video)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (r *VideoRepository) FetchLatestVideosByChannelID(channel_id string, limit int) (videos models.VideoList, err error) {
+	result := r.db.
+		Model(&models.Video{}).
+		Where("channel_id = ?", channel_id).
+		Order("created_at desc").
+		Limit(limit).
+		Find(&videos.Data)
+	if result.Error != nil {
+		return videos, result.Error
+	}
+	return videos, nil
+}
+
+func (r *VideoRepository) Update(video *models.Video) error {
+	result := r.db.Save(video)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (r *VideoRepository) Delete(id int) error {
+	result := r.db.Delete(&models.Video{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
