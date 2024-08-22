@@ -47,3 +47,5 @@ The ETL App was planned to be a sort of stress tester for Spotter API App, with 
 ![data/run_results.png](data/run_results.png)
 ![data/videos_example.png](data/videos_example.png)
 ![data/channels_example.png](data/channels_example.png)
+
+## If you find yourself here, I wish you all best and let that smile shine on your beautiful face just for the sake of making it till the end
