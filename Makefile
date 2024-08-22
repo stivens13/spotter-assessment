@@ -13,11 +13,7 @@ run: build
 
 compose: 
 	docker compose -f docker-compose.yaml up --build --remove-orphans
-	docker compose down -v
-
-compose-dev:
-	docker compose -f docker-compose-dev.yaml up --build --remove-orphans
-	docker compose down -v
+	docker compose down -v # ensures reproducibility between runs
 
 
 
