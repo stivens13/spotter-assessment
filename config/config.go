@@ -5,12 +5,12 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/stivens13/spotter-assessment/app/helper/constants"
+	"github.com/stivens13/spotter-assessment/helper/constants"
 )
 
 type SpotterAPIConfig struct {
-	YoutubeConfig *YoutubeConfig
-	DBConfig      *DBConfig
+	Host string
+	Port string
 }
 
 type ETLConfig struct {
@@ -70,17 +70,25 @@ func GetETLConfig() *ETLConfig {
 
 func GetSpotterAPIConfig() *SpotterAPIConfig {
 	return &SpotterAPIConfig{
-		YoutubeConfig: &YoutubeConfig{
-			APIKey: os.Getenv("YOUTUBE_API_KEY"),
-			Host:   os.Getenv("YOUTUBE_HOST"),
-			Port:   os.Getenv("YOUTUBE_PORT"),
-		},
-		DBConfig: &DBConfig{
-			User:     os.Getenv("POSTGRES_USER"),
-			Password: os.Getenv("POSTGRES_PASSWORD"),
-			Host:     os.Getenv("POSTGRES_HOST"),
-			Port:     os.Getenv("POSTGRES_PORT"),
-			Database: os.Getenv("POSTGRES_DB"),
-		},
+		Host: os.Getenv("SPOTTER_API_HOST"),
+		Port: os.Getenv("SPOTTER_API_PORT"),
+	}
+}
+
+func GetYoutubeConfig() *YoutubeConfig {
+	return &YoutubeConfig{
+		APIKey: os.Getenv("YOUTUBE_API_KEY"),
+		Host:   os.Getenv("YOUTUBE_HOST"),
+		Port:   os.Getenv("YOUTUBE_PORT"),
+	}
+}
+
+func GetDBConfig() *DBConfig {
+	return &DBConfig{
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		Host:     os.Getenv("POSTGRES_HOST"),
+		Port:     os.Getenv("POSTGRES_PORT"),
+		Database: os.Getenv("POSTGRES_DB"),
 	}
 }

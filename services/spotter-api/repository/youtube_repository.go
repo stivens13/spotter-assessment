@@ -3,8 +3,8 @@ package repository
 import (
 	"fmt"
 
-	"github.com/stivens13/spotter-assessment/app/models"
-	youtubeclient "github.com/stivens13/spotter-assessment/youtube-client"
+	"github.com/stivens13/spotter-assessment/models"
+	youtubeclient "github.com/stivens13/spotter-assessment/services/youtube-client"
 )
 
 var FetchVideoMetadataYoututubeURL = "http://localhost:9000/videos"

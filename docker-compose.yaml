@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: spotter-api 
     env_file:
-    - postgres.env
-    - youtube-api.env
+    - configs/postgres.env
+    - configs/youtube-api.env
     ports:
       - "8080:8080"
     volumes:
@@ -21,7 +21,7 @@ services:
     container_name: postgres
     image: postgres:16.4-alpine
     env_file:
-    - postgres.env
+    - configs/postgres.env
     ports:
       - "127.0.0.1:5432:5432"
     volumes:

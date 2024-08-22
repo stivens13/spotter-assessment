@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/stivens13/spotter-assessment/app/models"
-	"github.com/stivens13/spotter-assessment/app/usecase"
+	"github.com/stivens13/spotter-assessment/models"
+	"github.com/stivens13/spotter-assessment/services/spotter-api/usecase"
 )
 
 type VideoHandler struct {

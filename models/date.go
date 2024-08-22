@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/labstack/gommon/log"
-	"github.com/stivens13/spotter-assessment/app/helper/constants"
+	"github.com/stivens13/spotter-assessment/helper/constants"
 )
 
 /*

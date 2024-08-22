@@ -5,12 +5,12 @@ import (
 	"log"
 
 	"github.com/labstack/echo/v4"
-	"github.com/stivens13/spotter-assessment/app/config"
-	"github.com/stivens13/spotter-assessment/app/handler"
-	"github.com/stivens13/spotter-assessment/app/helper/constants"
-	"github.com/stivens13/spotter-assessment/app/repository"
-	"github.com/stivens13/spotter-assessment/app/usecase"
-	youtubeclient "github.com/stivens13/spotter-assessment/youtube-client"
+	"github.com/stivens13/spotter-assessment/config"
+	"github.com/stivens13/spotter-assessment/helper/constants"
+	"github.com/stivens13/spotter-assessment/services/spotter-api/handler"
+	"github.com/stivens13/spotter-assessment/services/spotter-api/repository"
+	"github.com/stivens13/spotter-assessment/services/spotter-api/usecase"
+	youtubeclient "github.com/stivens13/spotter-assessment/services/youtube-client"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -36,12 +36,14 @@ type Services struct {
 }
 
 func InitServices(cfg *config.SpotterAPIConfig) *Services {
-	db, err := openDBConnection(cfg.DBConfig)
+	dbCfg := config.GetDBConfig()
+	db, err := openDBConnection(dbCfg)
 	if err != nil {
 		log.Fatalf("failed to open database connection: %v", err)
 	}
 
-	youtubeClient := youtubeclient.NewYoutubeClient(cfg.YoutubeConfig)
+	youtubeCfg := config.GetYoutubeConfig()
+	youtubeClient := youtubeclient.NewYoutubeClient(youtubeCfg)
 	youtubeRepo := repository.NewYoutubeRepository(youtubeClient)
 	videoRepo := repository.NewVideoRepository(db)
 	videoUsecase := usecase.NewVideoInteractor(videoRepo, youtubeRepo)

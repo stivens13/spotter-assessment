@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stivens13/spotter-assessment/app/config"
-	"github.com/stivens13/spotter-assessment/app/models"
+	"github.com/stivens13/spotter-assessment/models"
+	"github.com/stivens13/spotter-assessment/config"
 )
 
 var FetchVideoMetadataYoututubeURL = "http://%s:/youtube/v3/search?key=%s&channelId=%s&part=snippet,id&order=date&maxResults=15"

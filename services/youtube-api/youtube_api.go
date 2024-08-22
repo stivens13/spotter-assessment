@@ -7,13 +7,13 @@ import (
 	"github.com/stivens13/spotter-assessment/tools/generator"
 )
 
-type YoutubeHandler struct {
+type YoutubeAPI struct {
 }
 
-func NewYoutubeHandler(
+func NewYoutubeAPI(
 	e *echo.Echo,
-) *YoutubeHandler {
-	youtubeHandler := &YoutubeHandler{
+) *YoutubeAPI {
+	youtubeHandler := &YoutubeAPI{
 	}
 
 	e.GET("/api:channel_id", youtubeHandler.FetchVideoMetadataByChannel)
@@ -21,7 +21,7 @@ func NewYoutubeHandler(
 }
 
 
-func (yh *YoutubeHandler) FetchVideoMetadataByChannel(c echo.Context) error {
+func (yh *YoutubeAPI) FetchVideoMetadataByChannel(c echo.Context) error {
 	channelID := c.Param("channel_id")
 	videos := generator.GenerateMockVideosMetadata(channelID)
 	return c.JSON(200, videos)
@@ -39,7 +39,7 @@ func InitServices() *Services {
 }
 
 func main() {
-	fmt.Println("Youtube Mock API starting...")
+	fmt.Println("Youtube API starting...")
 	services := InitServices()
 	fmt.Println("Services successfully initialized")
 	server := services.Server

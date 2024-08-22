@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/stivens13/spotter-assessment/app/helper/constants"
-	"github.com/stivens13/spotter-assessment/app/models"
-	"github.com/stivens13/spotter-assessment/app/repository"
+	"github.com/stivens13/spotter-assessment/helper/constants"
+	"github.com/stivens13/spotter-assessment/models"
+	"github.com/stivens13/spotter-assessment/spotter-api/repository"
 
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"

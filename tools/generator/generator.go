@@ -7,7 +7,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/jaswdr/faker/v2"
 	"github.com/mazen160/go-random"
-	"github.com/stivens13/spotter-assessment/app/helper/constants"
+	"github.com/stivens13/spotter-assessment/helper/constants"
 	"golang.org/x/exp/rand"
 )
 

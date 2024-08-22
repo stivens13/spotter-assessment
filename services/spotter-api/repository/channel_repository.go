@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"github.com/stivens13/spotter-assessment/app/models"
+	"github.com/stivens13/spotter-assessment/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

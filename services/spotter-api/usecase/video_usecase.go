@@ -3,9 +3,9 @@ package usecase
 import (
 	"errors"
 
-	"github.com/stivens13/spotter-assessment/app/helper/constants"
-	"github.com/stivens13/spotter-assessment/app/models"
-	"github.com/stivens13/spotter-assessment/app/repository"
+	"github.com/stivens13/spotter-assessment/helper/constants"
+	"github.com/stivens13/spotter-assessment/models"
+	"github.com/stivens13/spotter-assessment/services/spotter-api/repository"
 )
 
 type VideoInteractor struct {

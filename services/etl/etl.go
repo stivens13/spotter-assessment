@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/stivens13/spotter-assessment/app/config"
-	"github.com/stivens13/spotter-assessment/app/models"
+	"github.com/stivens13/spotter-assessment/config"
+	"github.com/stivens13/spotter-assessment/models"
+	youtubeclient "github.com/stivens13/spotter-assessment/services/youtube-client"
 	"github.com/stivens13/spotter-assessment/tools/generator"
-	youtubeclient "github.com/stivens13/spotter-assessment/youtube-client"
 )
 
 var (
@@ -117,5 +118,10 @@ func (etl *ETL) LoadChannels(channelIDs []string) error {
 }
 
 func main() {
-}
+	etl, err := InitServices()
+	if err != nil {
+		log.Fatal("Error initializing ETL services: %v", err)
+	}
 
+	etl.StartETL()
+}

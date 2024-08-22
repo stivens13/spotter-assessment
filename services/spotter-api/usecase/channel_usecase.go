@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/stivens13/spotter-assessment/app/models"
-	"github.com/stivens13/spotter-assessment/app/repository"
+	"github.com/stivens13/spotter-assessment/models"
+	"github.com/stivens13/spotter-assessment/services/spotter-api/repository"
 	"gorm.io/gorm"
 )
 
