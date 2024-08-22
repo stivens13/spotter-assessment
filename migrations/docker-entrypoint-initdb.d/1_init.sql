@@ -1,8 +1,9 @@
 -- Create channels table
+-- enforce the channel_id to be unique and fixed length of 24
 
 CREATE TABLE IF NOT EXISTS channels(
     id uuid NOT NULL DEFAULT gen_random_uuid(),
-    channel_id varchar(24) NOT NULL,
+    channel_id varchar(24) NOT NULL CHECK (char_length(channel_id) = 24),
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at timestamp with time zone,
@@ -11,10 +12,16 @@ CREATE TABLE IF NOT EXISTS channels(
 );
 CREATE INDEX idx_channels_deleted_at ON channels USING btree (channel_id, deleted_at);
 
+-- Create channels table
+-- enforce the video_id to be unique and fixed length of 11
+-- add foreign key constraint to channel_id
+-- add index on channel_id and and upload_date for faster query
+-- in reverse chronological order
+
 CREATE TABLE videos (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
-    video_id varchar(11) NOT NULL,
-    channel_id varchar(24) NOT NULL,
+    video_id varchar(11) NOT NULL CHECK (char_length(video_id) = 11),
+    channel_id varchar(24) NOT NULL CHECK (char_length(channel_id) = 24),
     video_title varchar(255),
     upload_date date,
     created_at timestamp with time zone DEFAULT now(),

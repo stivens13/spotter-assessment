@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../horizon-data-pipeline"
+		}
+	],
+	"settings": {
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 5432,
+				"driver": "PostgreSQL",
+				"name": "Spotter",
+				"database": "postgres",
+				"username": "postgres"
+			}
+		],
+		"makefile.configureOnOpen": false
+	}
+}

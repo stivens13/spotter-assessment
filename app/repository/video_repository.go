@@ -15,23 +15,22 @@ func NewVideoRepository(db *gorm.DB) *VideoRepository {
 	}
 }
 
-func (r *VideoRepository) Create(video *models.Video) error {
+func (r *VideoRepository) Create(video *models.Video) (*models.Video, error) {
 	result := r.db.Create(video)
 	if result.Error != nil {
-		return result.Error
+		return nil, result.Error
 	}
-	return nil
+	return video, nil
 }
 
-func (r *VideoRepository) FetchLatestVideosByChannelID(channel_id string, limit int) (videos models.VideoList, err error) {
-	result := r.db.
+func (r *VideoRepository) FetchLatestVideosByChannelID(channelID string, limit int) (videos models.VideoList, err error) {
+	if err := r.db.
 		Model(&models.Video{}).
-		Where("channel_id = ?", channel_id).
+		Where("channel_id = ?", channelID).
 		Order("created_at desc").
 		Limit(limit).
-		Find(&videos.Data)
-	if result.Error != nil {
-		return videos, result.Error
+		Find(&videos.Data); err != nil {
+		return videos, err.Error
 	}
 	return videos, nil
 }

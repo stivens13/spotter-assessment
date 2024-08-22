@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: app 
+    env_file:
+    - postgres.env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${PWD}:/app/
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: go run app/main.go
+    networks:
+      - backend-network
+  postgres:
+    container_name: postgres
+    image: postgres:16.4-alpine
+    env_file:
+    - postgres.env
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # Data persistance is disabled to enable clean db startup and perfect reproducibility
+      # To enable data persistance, uncomment the following line
+      # - ./data/postgres:/var/lib/postgresql/data
+      - ./migrations/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+
+volumes:  
+  pgdata: {}
+
+networks:
+  backend-network:
+    driver: bridge

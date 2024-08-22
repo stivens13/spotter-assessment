@@ -12,7 +12,7 @@ type Video struct {
 	VideoID    string    `json:"video_id" gorm:"uniqueIndex; type:varchar(11)"`
 	ChannelID  string    `json:"channel_id" gorm:"index; type:varchar(24)"`
 	VideoTitle string    `json:"video_title" gorm:"type:varchar(255)"`
-	UploadDate string    `json:"upload_date" gorm:"type:date; index:,sort:desc"`
+	UploadDate Date      `json:"upload_date" gorm:"type:date; index:,sort:desc"`
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	DeletedAt  gorm.DeletedAt `gorm:"index"`

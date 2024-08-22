@@ -3,11 +3,10 @@ package usecase
 import (
 	"errors"
 
+	"github.com/stivens13/spotter-assessment/app/helper/constants"
 	"github.com/stivens13/spotter-assessment/app/models"
 	"github.com/stivens13/spotter-assessment/app/repository"
 )
-
-const LATEST_VIDEO_LIMIT = 5
 
 type VideoInteractor struct {
 	videoRepo *repository.VideoRepository
@@ -20,18 +19,27 @@ func NewVideoInteractor(videoRepo *repository.VideoRepository) *VideoInteractor 
 }
 
 func (vi *VideoInteractor) FetchLatestVideosByChannelID(channel_id string) (models.VideoList, error) {
-	return vi.videoRepo.FetchLatestVideosByChannelID(channel_id, LATEST_VIDEO_LIMIT)
+	response, err := vi.videoRepo.FetchLatestVideosByChannelID(channel_id, constants.LATEST_VIDEO_LIMIT)
+	if err != nil {
+		return models.VideoList{}, err
+	}
+
+	if len(response.Data) == 0 {
+		return models.VideoList{}, errors.New("no videos found")
+	}
+
+	return response, nil
 }
 
-func (vi *VideoInteractor) Create(video *models.Video) error {
+func (vi *VideoInteractor) Create(video *models.Video) (*models.Video, error) {
 	if video.VideoID == "" || video.VideoTitle == "" || video.ChannelID == "" {
-		return errors.New("title and URL cannot be empty")
+		return nil, errors.New("title and URL cannot be empty")
 	}
 
-	err := vi.videoRepo.Create(video)
+	response, err := vi.videoRepo.Create(video)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return response, nil
 }
