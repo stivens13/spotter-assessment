@@ -10,6 +10,7 @@ import (
 	"github.com/stivens13/spotter-assessment/app/helper/constants"
 	"github.com/stivens13/spotter-assessment/app/repository"
 	"github.com/stivens13/spotter-assessment/app/usecase"
+	youtubeclient "github.com/stivens13/spotter-assessment/youtube-client"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -29,24 +30,24 @@ func openDBConnection(dbConfig *config.DBConfig) (*gorm.DB, error) {
 
 type Services struct {
 	Server         *echo.Echo
-	VideoUsecase   *usecase.VideoInteractor
-	ChannelUsecase *usecase.ChannelInteractor
 	VideoHandler   *handler.VideoHandler
 	ChannelHandler *handler.ChannelHandler
 	DB             *gorm.DB
 }
 
-func InitServices(cfg *config.Config) *Services {
+func InitServices(cfg *config.SpotterAPIConfig) *Services {
 	db, err := openDBConnection(cfg.DBConfig)
 	if err != nil {
 		log.Fatalf("failed to open database connection: %v", err)
 	}
 
+	youtubeClient := youtubeclient.NewYoutubeClient(cfg.YoutubeConfig)
+	youtubeRepo := repository.NewYoutubeRepository(youtubeClient)
 	videoRepo := repository.NewVideoRepository(db)
-	videoUsecase := usecase.NewVideoInteractor(videoRepo)
+	videoUsecase := usecase.NewVideoInteractor(videoRepo, youtubeRepo)
 
 	channelRepo := repository.NewChannelRepository(db)
-	channelUsecase := usecase.NewChannelInteractor(channelRepo)
+	channelUsecase := usecase.NewChannelInteractor(channelRepo, videoUsecase, youtubeRepo)
 
 	echo := echo.New()
 
@@ -56,8 +57,6 @@ func InitServices(cfg *config.Config) *Services {
 	return &Services{
 		DB:             db,
 		Server:         echo,
-		VideoUsecase:   videoUsecase,
-		ChannelUsecase: channelUsecase,
 		VideoHandler:   videoHandler,
 		ChannelHandler: channelHandler,
 	}
@@ -65,7 +64,7 @@ func InitServices(cfg *config.Config) *Services {
 
 func main() {
 	fmt.Println("Spotter API starting...")
-	config := config.InitConfig()
+	config := config.GetSpotterAPIConfig()
 	fmt.Println("Config successfully loaded")
 
 	services := InitServices(config)

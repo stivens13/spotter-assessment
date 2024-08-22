@@ -26,10 +26,14 @@ const (
 )
 
 type MockVideo struct {
-	VideoID      string
-	ChannelID    string
-	VideoTitle   string
-	UploadedDate string
+	VideoID      string `json:"video_id"`
+	ChannelID    string `json:"channel_id"`
+	VideoTitle   string `json:"video_title"`
+	UploadedDate string `json:"upload_date"`
+}
+
+type MockVideos struct {
+	Data []*MockVideo `json:"data"`
 }
 
 type MockChannel struct {
@@ -46,7 +50,7 @@ func GenerateMockChannelID() string {
 	return RandomString(ChannelIDLength)
 }
 
-func GenerateMockVideoForChannel(channelID string) *MockVideo {
+func GenerateMockVideoMetadata(channelID string) *MockVideo {
 	return &MockVideo{
 		VideoID:      RandomString(VideoIDLength),
 		ChannelID:    channelID,
@@ -55,9 +59,10 @@ func GenerateMockVideoForChannel(channelID string) *MockVideo {
 	}
 }
 
-func GenerateMockVideosForChannel(channelID string) (videos []*MockVideo) {
+func GenerateMockVideosMetadata(channelID string) (videos MockVideos) {
+	videos.Data = make([]*MockVideo, 0)
 	for range fakeit.Number(3, 15) {
-		videos = append(videos, GenerateMockVideoForChannel(channelID))
+		videos.Data = append(videos.Data, GenerateMockVideoMetadata(channelID))
 	}
 	return videos
 }

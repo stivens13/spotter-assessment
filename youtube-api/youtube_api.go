@@ -16,14 +16,14 @@ func NewYoutubeHandler(
 	youtubeHandler := &YoutubeHandler{
 	}
 
-	e.GET("/api/:channel_id", youtubeHandler.FetchVideoMetadataByChannel)
+	e.GET("/api:channel_id", youtubeHandler.FetchVideoMetadataByChannel)
 	return youtubeHandler
 }
 
 
 func (yh *YoutubeHandler) FetchVideoMetadataByChannel(c echo.Context) error {
 	channelID := c.Param("channel_id")
-	videos := generator.GenerateMockVideo(channelID)
+	videos := generator.GenerateMockVideosMetadata(channelID)
 	return c.JSON(200, videos)
 }
 
