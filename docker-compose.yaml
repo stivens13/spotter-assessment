@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: app 
+    container_name: spotter-api 
     env_file:
     - postgres.env
     ports:
