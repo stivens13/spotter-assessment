@@ -120,7 +120,7 @@ func (etl *ETL) LoadChannels(channelIDs []string) error {
 func main() {
 	etl, err := InitServices()
 	if err != nil {
-		log.Fatal("Error initializing ETL services: %v", err)
+		log.Fatalf("error initializing ETL services: %v", err)
 	}
 
 	etl.StartETL()

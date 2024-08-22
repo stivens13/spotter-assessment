@@ -2,19 +2,16 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: services/spotter-api/Dockerfile
     container_name: spotter-api 
     env_file:
     - configs/postgres.env
     - configs/youtube-api.env
     ports:
       - "8080:8080"
-    volumes:
-      - ${PWD}:/app/
     depends_on:
       postgres:
         condition: service_healthy
-    command: go run app/main.go
     networks:
       - backend-network
   postgres:

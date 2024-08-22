@@ -63,7 +63,7 @@
 			"czfilmRating": "string",
 			"djctqRating": "string",
 			"djctqRatingReasons": [
-				,
+				{},
         "string"
 			],
 			"ecbmctRating": "string",
@@ -75,7 +75,7 @@
 			"fmocRating": "string",
 			"fpbRating": "string",
 			"fpbRatingReasons": [
-				,
+				{},
         "string"
 			],
 			"fskRating": "string",

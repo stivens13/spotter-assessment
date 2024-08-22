@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: services/spotter-api/Dockerfile.dev
     container_name: spotter-api-dev
     env_file:
     - configs/postgres.env
@@ -14,7 +14,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: go run app/main.go
+    command: go run services/spotter-api/main.go
     networks:
       - backend-network
     restart: unless-stopped
