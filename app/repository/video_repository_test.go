@@ -47,9 +47,6 @@ func TestVideoRepositorySuite(t *testing.T) {
 func (s *VideoRepositorySuite) TestVideoRepository_FetchLatestVideosByChannelID() {
 	limit := constants.LATEST_VIDEO_LIMIT
 	opts := cmpopts.IgnoreFields(models.Video{}, "ID", "CreatedAt", "UpdatedAt", "DeletedAt", "UploadDate")
-	// opts := cmp.Options{
-	// 	cmpopts.IgnoreFields(models.Video{}, "ID", "CreatedAt", "UpdatedAt", "DeletedAt"),
-	// }
 	tests := map[string]struct {
 		name      string
 		channelID string
@@ -59,7 +56,7 @@ func (s *VideoRepositorySuite) TestVideoRepository_FetchLatestVideosByChannelID(
 		"Valid case - Channel 1": {
 			channelID: "UC6qq5ZRn_epjgdKwtgmeSd3",
 			expected: models.VideoList{
-				Data: []models.Video{
+				Data: []*models.Video{
 					{VideoID: "aWyckSMztx1", ChannelID: "UC6qq5ZRn_epjgdKwtgmeSd3", VideoTitle: "Example1 Video 1", UploadDate: models.NewDate("2024-03-21")},
 					{VideoID: "aWyckSMztx2", ChannelID: "UC6qq5ZRn_epjgdKwtgmeSd3", VideoTitle: "Example1 Video 2", UploadDate: models.NewDate("2024-03-20")},
 					{VideoID: "aWyckSMztx3", ChannelID: "UC6qq5ZRn_epjgdKwtgmeSd3", VideoTitle: "Example1 Video 3", UploadDate: models.NewDate("2024-03-19")},
@@ -73,7 +70,7 @@ func (s *VideoRepositorySuite) TestVideoRepository_FetchLatestVideosByChannelID(
 		"Valid case - Channel 2": {
 			channelID: "UC0032Wkd3aCT4rRi1YOVc2d",
 			expected: models.VideoList{
-				Data: []models.Video{
+				Data: []*models.Video{
 					{VideoID: "bc92oS2pxg1", ChannelID: "UC0032Wkd3aCT4rRi1YOVc2d", VideoTitle: "Example2 Video 1", UploadDate: models.NewDate("2024-03-19")},
 					{VideoID: "bc92oS2pxg2", ChannelID: "UC0032Wkd3aCT4rRi1YOVc2d", VideoTitle: "Example2 Video 2", UploadDate: models.NewDate("2024-03-18")},
 					{VideoID: "bc92oS2pxg3", ChannelID: "UC0032Wkd3aCT4rRi1YOVc2d", VideoTitle: "Example2 Video 3", UploadDate: models.NewDate("2024-03-18")},
@@ -87,7 +84,7 @@ func (s *VideoRepositorySuite) TestVideoRepository_FetchLatestVideosByChannelID(
 		"Valid case - Channel 3": {
 			channelID: "UCTRQblH_muP2X68UsLwFm2G",
 			expected: models.VideoList{
-				Data: []models.Video{
+				Data: []*models.Video{
 					{VideoID: "zjk3M4hNjG1", ChannelID: "UCTRQblH_muP2X68UsLwFm2G", VideoTitle: "Example3 Video 1", UploadDate: models.NewDate("2024-03-19")},
 					{VideoID: "zjk3M4hNjG2", ChannelID: "UCTRQblH_muP2X68UsLwFm2G", VideoTitle: "Example3 Video 2", UploadDate: models.NewDate("2024-03-18")},
 					{VideoID: "zjk3M4hNjG3", ChannelID: "UCTRQblH_muP2X68UsLwFm2G", VideoTitle: "Example3 Video 3", UploadDate: models.NewDate("2024-03-18")},
@@ -102,7 +99,7 @@ func (s *VideoRepositorySuite) TestVideoRepository_FetchLatestVideosByChannelID(
 		// Usecase must handle empty response and return 404
 		"Valid case - missing channel ID": {
 			channelID: "invalid",
-			expected:  models.VideoList{Data: []models.Video{}},
+			expected:  models.VideoList{Data: []*models.Video{}},
 			errWanted: false,
 		},
 	}
