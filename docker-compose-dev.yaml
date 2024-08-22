@@ -6,6 +6,7 @@ services:
     container_name: spotter-api-dev
     env_file:
     - postgres.env
+    - youtube-api.env
     ports:
       - "8080:8080"
     volumes:

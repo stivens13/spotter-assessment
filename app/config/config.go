@@ -3,10 +3,26 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
+
+	"github.com/stivens13/spotter-assessment/app/helper/constants"
 )
 
-type Config struct {
-	DBConfig *DBConfig
+type SpotterAPIConfig struct {
+	YoutubeConfig *YoutubeConfig
+	DBConfig      *DBConfig
+}
+
+type ETLConfig struct {
+	YoutubeConfig           *YoutubeConfig
+	NewChannelAmount        int
+	AverageVideosPerChannel int
+}
+
+type YoutubeConfig struct {
+	APIKey string
+	Host   string
+	Port   string
 }
 
 type DBConfig struct {
@@ -28,9 +44,37 @@ func (c *DBConfig) GetDSN() string {
 	)
 }
 
-func InitConfig() *Config {
+func GetETLConfig() *ETLConfig {
+	newChannelAmountStr := os.Getenv("NEW_CHANNEL_AMOUNT")
+	newChannelAmount, err := strconv.Atoi(newChannelAmountStr)
+	if err != nil {
+		newChannelAmount = constants.DEFAULT_NEW_CHANNELS
+	}
 
-	return &Config{
+	averageVideosPerChannelStr := os.Getenv("AVERAGE_VIDEOS_PER_CHANNEL")
+	averageVideosPerChannel, err := strconv.Atoi(averageVideosPerChannelStr)
+	if err != nil {
+		averageVideosPerChannel = constants.DEFAULT_AVG_VIDEOS_PER_CHANNEL
+	}
+
+	return &ETLConfig{
+		YoutubeConfig: &YoutubeConfig{
+			APIKey: os.Getenv("YOUTUBE_API_KEY"),
+			Host:   os.Getenv("YOUTUBE_HOST"),
+			Port:   os.Getenv("YOUTUBE_PORT"),
+		},
+		NewChannelAmount:        newChannelAmount,
+		AverageVideosPerChannel: averageVideosPerChannel,
+	}
+}
+
+func GetSpotterAPIConfig() *SpotterAPIConfig {
+	return &SpotterAPIConfig{
+		YoutubeConfig: &YoutubeConfig{
+			APIKey: os.Getenv("YOUTUBE_API_KEY"),
+			Host:   os.Getenv("YOUTUBE_HOST"),
+			Port:   os.Getenv("YOUTUBE_PORT"),
+		},
 		DBConfig: &DBConfig{
 			User:     os.Getenv("POSTGRES_USER"),
 			Password: os.Getenv("POSTGRES_PASSWORD"),
