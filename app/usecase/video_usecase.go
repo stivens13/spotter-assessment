@@ -9,12 +9,17 @@ import (
 )
 
 type VideoInteractor struct {
-	VideoRepo *repository.VideoRepository
+	VideoRepo   *repository.VideoRepository
+	YoutubeRepo *repository.YoutubeRepository
 }
 
-func NewVideoInteractor(videoRepo *repository.VideoRepository) *VideoInteractor {
+func NewVideoInteractor(
+	videoRepo *repository.VideoRepository,
+	youtubeRepo *repository.YoutubeRepository,
+) *VideoInteractor {
 	return &VideoInteractor{
-		VideoRepo: videoRepo,
+		VideoRepo:   videoRepo,
+		YoutubeRepo: youtubeRepo,
 	}
 }
 
@@ -45,7 +50,6 @@ func (vi *VideoInteractor) Create(video *models.Video) (*models.Video, error) {
 }
 
 func (vi *VideoInteractor) CreateBatch(videos models.VideoList) error {
-	// TODO validate inputs
 
 	err := vi.VideoRepo.CreateBatch(videos)
 	if err != nil {
