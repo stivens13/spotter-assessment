@@ -42,32 +42,28 @@ func GenerateMockChannel() *MockChannel {
 	}
 }
 
-func GenerateMockVideo(channelID string) *MockVideo {
+func GenerateMockChannelID() string {
+	return RandomString(ChannelIDLength)
+}
+
+func GenerateMockVideoForChannel(channelID string) *MockVideo {
 	return &MockVideo{
 		VideoID:      RandomString(VideoIDLength),
 		ChannelID:    channelID,
-		VideoTitle:   GenerateMockSentenceFakeit(GenerateRandomSmallInt()),
+		VideoTitle:   GenerateMockSentenceFakeit(fakeit.Number(3, 7)),
 		UploadedDate: GenerateMockDate(),
 	}
 }
 
-func GenerateMockVideos(channelID string) (videos []*MockVideo) {
-	for _ = range(10) {
-		videos = append(videos, GenerateMockVideo(channelID))
+func GenerateMockVideosForChannel(channelID string) (videos []*MockVideo) {
+	for range fakeit.Number(3, 15) {
+		videos = append(videos, GenerateMockVideoForChannel(channelID))
 	}
 	return videos
 }
 
 func GenerateSecureID(n int) string {
 	data, err := random.String(n)
-	if err != nil {
-		fmt.Printf("failed to generate secure string: %v", err)
-	}
-	return data
-}
-
-func GenerateRandomSmallInt() int {
-	data, err := random.GetInt(MaxVideoWordCount)
 	if err != nil {
 		fmt.Printf("failed to generate secure string: %v", err)
 	}
