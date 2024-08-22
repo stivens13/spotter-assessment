@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stivens13/spotter-assessment/tools/generator"
@@ -16,8 +17,13 @@ func NewYoutubeAPI(
 	youtubeHandler := &YoutubeAPI{
 	}
 
-	e.GET("/api:channel_id", youtubeHandler.FetchVideoMetadataByChannel)
+	e.GET("/api/:channel_id", youtubeHandler.FetchVideoMetadataByChannel)
+	e.GET("/health", Healthcheck)
 	return youtubeHandler
+}
+
+func Healthcheck(c echo.Context) error {
+	return c.String(http.StatusOK, "OK")
 }
 
 
@@ -29,12 +35,15 @@ func (yh *YoutubeAPI) FetchVideoMetadataByChannel(c echo.Context) error {
 
 type Services struct {
 	Server *echo.Echo
+	YoutubeAPI *YoutubeAPI
 }
 
 func InitServices() *Services {
 	echo := echo.New()
+	youtubeAPI := NewYoutubeAPI(echo)
 	return &Services{
 		Server: echo,
+		YoutubeAPI: youtubeAPI,
 	}
 }
 

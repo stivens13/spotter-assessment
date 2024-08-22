@@ -33,10 +33,6 @@ type VideoMetadata struct {
 	UploadDate Date   `json:"upload_date" gorm:"type:date; index:,sort:desc"`
 }
 
-// type VideoMetadataList struct {
-// 	Data []*VideoMetadata `json:"data"`
-// }
-
 type VideoMap struct {
 	Data map[string]VideoList `json:"data"`
 }

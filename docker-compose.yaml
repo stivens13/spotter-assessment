@@ -1,9 +1,10 @@
 services:
-  app:
+  spotter-api:
     build:
       context: .
       dockerfile: services/spotter-api/Dockerfile
-    container_name: spotter-api 
+    container_name: spotter 
+    hostname: spotter
     env_file:
     - configs/postgres.env
     - configs/youtube-api.env
@@ -13,7 +14,44 @@ services:
       postgres:
         condition: service_healthy
     networks:
+      - backend-network  
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/health || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 15
+  youtube-api:
+    build:
+      context: .
+      dockerfile: services/youtube-api/Dockerfile
+    container_name: youtube 
+    hostname: youtube 
+    ports:
+      - "9000:9000"
+    networks:
+      - backend-network  
+    healthcheck:
+      test: curl --fail -s http://localhost:9000/health || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 15
+  etl:
+    build:
+      context: .
+      dockerfile: services/etl/Dockerfile
+    container_name: etl
+    env_file:
+      - configs/etl.env
+      - configs/youtube-api.env
+      - configs/spotter.env
+    networks:
       - backend-network
+    depends_on:
+      postgres:
+        condition: service_healthy      
+      youtube-api:
+        condition: service_healthy
+    # command: sleep infinity
   postgres:
     container_name: postgres
     image: postgres:16.4-alpine

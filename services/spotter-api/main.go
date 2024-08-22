@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stivens13/spotter-assessment/config"
@@ -35,12 +36,13 @@ type Services struct {
 	DB             *gorm.DB
 }
 
-func InitServices(cfg *config.SpotterAPIConfig) *Services {
+func InitServices() *Services {
 	dbCfg := config.GetDBConfig()
 	db, err := openDBConnection(dbCfg)
 	if err != nil {
 		log.Fatalf("failed to open database connection: %v", err)
 	}
+
 
 	youtubeCfg := config.GetYoutubeConfig()
 	youtubeClient := youtubeclient.NewYoutubeClient(youtubeCfg)
@@ -56,6 +58,9 @@ func InitServices(cfg *config.SpotterAPIConfig) *Services {
 	videoHandler := handler.NewVideoHandler(echo, videoUsecase)
 	channelHandler := handler.NewChannelHandler(echo, channelUsecase)
 
+	echo.GET("/health", Healthcheck)
+
+
 	return &Services{
 		DB:             db,
 		Server:         echo,
@@ -64,12 +69,14 @@ func InitServices(cfg *config.SpotterAPIConfig) *Services {
 	}
 }
 
+func Healthcheck(c echo.Context) error {
+	return c.String(http.StatusOK, "OK")
+}
+
 func main() {
 	fmt.Println("Spotter API starting...")
-	config := config.GetSpotterAPIConfig()
-	fmt.Println("Config successfully loaded")
 
-	services := InitServices(config)
+	services := InitServices()
 	fmt.Println("Services successfully initialized")
 	server := services.Server
 	fmt.Println("Starting server")

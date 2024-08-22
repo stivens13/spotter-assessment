@@ -9,7 +9,7 @@ import (
 	"github.com/stivens13/spotter-assessment/config"
 )
 
-var FetchVideoMetadataYoututubeURL = "http://%s:/youtube/v3/search?key=%s&channelId=%s&part=snippet,id&order=date&maxResults=15"
+var FetchVideoMetadataYoututubeURL = "http://%s:%s/api/%s"
 
 type YoutubeClient struct {
 	cfg *config.YoutubeConfig
@@ -23,7 +23,6 @@ func (yc *YoutubeClient) getVideoMetadataQuery(channelID string) string {
 	return fmt.Sprintf(FetchVideoMetadataYoututubeURL, 
 		yc.cfg.Host,
 		yc.cfg.Port,
-		yc.cfg.APIKey, 
 		channelID,
 	)
 }
@@ -41,12 +40,11 @@ func (yc *YoutubeClient) FetchVideoMetadataFromYoutube(channelID string) (
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		fmt.Println("HTTP GET request failed with status code:", resp.StatusCode)
+		fmt.Printf("failed to fetch youtube api channel data with status code: %d, channel: %s, query: %s\n", resp.StatusCode, channelID, query)
 		return response, err
 	}
 
-	response.Data = make([]*models.Video, 0)
-	err = json.NewDecoder(resp.Body).Decode(&response.Data)
+	err = json.NewDecoder(resp.Body).Decode(&response)
 	if err != nil {
 		fmt.Println("Error decoding response body:", err)
 		return response, err
