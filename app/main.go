@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stivens13/spotter-assessment/app/config"
 	"github.com/stivens13/spotter-assessment/app/handler"
+	"github.com/stivens13/spotter-assessment/app/helper/constants"
 	"github.com/stivens13/spotter-assessment/app/repository"
 	"github.com/stivens13/spotter-assessment/app/usecase"
 	"gorm.io/driver/postgres"
@@ -16,7 +17,9 @@ import (
 func openDBConnection(dbConfig *config.DBConfig) (*gorm.DB, error) {
 	dsn := dbConfig.GetDSN()
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		CreateBatchSize: constants.DB_CREATE_BATCH_SIZE,
+	})
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
@@ -29,6 +32,7 @@ type Services struct {
 	VideoUsecase   *usecase.VideoInteractor
 	ChannelUsecase *usecase.ChannelInteractor
 	VideoHandler   *handler.VideoHandler
+	ChannelHandler *handler.ChannelHandler
 	DB             *gorm.DB
 }
 
@@ -47,6 +51,7 @@ func InitServices(cfg *config.Config) *Services {
 	echo := echo.New()
 
 	videoHandler := handler.NewVideoHandler(echo, videoUsecase)
+	channelHandler := handler.NewChannelHandler(echo, channelUsecase)
 
 	return &Services{
 		DB:             db,
@@ -54,6 +59,7 @@ func InitServices(cfg *config.Config) *Services {
 		VideoUsecase:   videoUsecase,
 		ChannelUsecase: channelUsecase,
 		VideoHandler:   videoHandler,
+		ChannelHandler: channelHandler,
 	}
 }
 

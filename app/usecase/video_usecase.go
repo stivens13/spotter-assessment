@@ -9,17 +9,17 @@ import (
 )
 
 type VideoInteractor struct {
-	videoRepo *repository.VideoRepository
+	VideoRepo *repository.VideoRepository
 }
 
 func NewVideoInteractor(videoRepo *repository.VideoRepository) *VideoInteractor {
 	return &VideoInteractor{
-		videoRepo: videoRepo,
+		VideoRepo: videoRepo,
 	}
 }
 
 func (vi *VideoInteractor) FetchLatestVideosByChannelID(channel_id string) (models.VideoList, error) {
-	response, err := vi.videoRepo.FetchLatestVideosByChannelID(channel_id, constants.LATEST_VIDEO_LIMIT)
+	response, err := vi.VideoRepo.FetchLatestVideosByChannelID(channel_id, constants.LATEST_VIDEO_LIMIT)
 	if err != nil {
 		return models.VideoList{}, err
 	}
@@ -36,10 +36,21 @@ func (vi *VideoInteractor) Create(video *models.Video) (*models.Video, error) {
 		return nil, errors.New("title and URL cannot be empty")
 	}
 
-	response, err := vi.videoRepo.Create(video)
+	response, err := vi.VideoRepo.Create(video)
 	if err != nil {
 		return nil, err
 	}
 
 	return response, nil
+}
+
+func (vi *VideoInteractor) CreateBatch(videos models.VideoList) error {
+	// TODO validate inputs
+
+	err := vi.VideoRepo.CreateBatch(videos)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

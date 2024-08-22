@@ -2,10 +2,7 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -21,20 +18,17 @@ type DBConfig struct {
 }
 
 func (c *DBConfig) GetDSN() string {
-    return fmt.Sprintf(
-        "host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=America/Los_Angeles",
-        c.Host,
-        c.User,
-        c.Password,
-        c.Database,
-        c.Port,
-    )
+	return fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=America/Los_Angeles",
+		c.Host,
+		c.User,
+		c.Password,
+		c.Database,
+		c.Port,
+	)
 }
 
 func InitConfig() *Config {
-	if err := godotenv.Load("postgres.env"); err != nil {
-		log.Fatal("Error loading postgres.env file")
-	}
 
 	return &Config{
 		DBConfig: &DBConfig{

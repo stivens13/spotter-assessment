@@ -20,11 +20,10 @@ func NewVideoHandler(
 		VideoUsecase: videoUsecase,
 	}
 	e.GET("/videos/:channel_id", videoHandler.GetMostRecentVideos)
-	e.POST("/videos", videoHandler.CreateVideo)
+	e.POST("/video", videoHandler.CreateVideo)
+	e.POST("/videos", videoHandler.CreateVideos)
 
-	return &VideoHandler{
-		VideoUsecase: videoUsecase,
-	}
+	return videoHandler
 }
 
 func (vh *VideoHandler) GetMostRecentVideos(c echo.Context) error {
@@ -53,3 +52,17 @@ func (vh *VideoHandler) CreateVideo(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, response)
 }
+
+func (vh *VideoHandler) CreateVideos(c echo.Context) error {
+	var videos models.VideoList
+	if err := c.Bind(&videos); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	if err := vh.VideoUsecase.CreateBatch(videos); err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusCreated)
+}
+

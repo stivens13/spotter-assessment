@@ -19,7 +19,7 @@ type Video struct {
 }
 
 type VideoList struct {
-	Data []Video `json:"data"`
+	Data []*Video `json:"data"`
 }
 
 type Channel struct {
@@ -28,4 +28,12 @@ type Channel struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
+}
+
+type ChannelRawList struct {
+	Data []string `json:"data"`
+}
+
+type ChannelList struct {
+	Data []*Channel `json:"data"`
 }
